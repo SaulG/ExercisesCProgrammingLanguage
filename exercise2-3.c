@@ -64,7 +64,6 @@ int htoi(char s[]) {
       if (aux < 0) {
 	return -1;
       } else {
-	printf("Examine: %c\t value: %d\n",s[i], aux);
 	valores[contador] = aux;
 	contador++;
       }
