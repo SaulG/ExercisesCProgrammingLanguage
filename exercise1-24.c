@@ -1,7 +1,6 @@
 #include <stdio.h>
 #define MAXTEXT 10000
 #define MAXLINE 1000
-#define LINESIZE 40
 #define IN 0
 #define OUT 1
 #define MAXSTACK 1000
