@@ -82,4 +82,3 @@ int getLine(char line[], int lim) {
   line[i] = '\0';
   return i;
 }
-
