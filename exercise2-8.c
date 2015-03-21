@@ -22,11 +22,11 @@ unsigned rightrot(unsigned x, int p, int n) {
     aux |= 1 & (x >> (p - i));
     aux = aux << 1;
   }
-  aux = aux << ((p + 1) - n);
+  aux = aux << init;
   if (bitSize > (p + 1))
-    return (((1 << ((p + 1) - n)) - 1) & x) | aux | ((((1 << ((p + 1) - bitSize)) - 1) << (p + 1)) & x);
+    return (((1 << init) - 1) & x) | aux | ((((1 << ((p + 1) - bitSize)) - 1) << (p + 1)) & x);
   else
-    return (((1 << ((p + 1) - n)) - 1) & x) | aux;
+    return (((1 << init) - 1) & x) | aux;
 }
 
 unsigned invertBinary(unsigned x) {
@@ -42,7 +42,7 @@ unsigned invertBinary(unsigned x) {
 
 
 int getBitsSize(double n) {
-  return ceil(log2(n));
+  return (int)ceil(log2(n));
 }
 
 double log2(double n) {
