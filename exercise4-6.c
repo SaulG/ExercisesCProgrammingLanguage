@@ -97,7 +97,9 @@ int main () {
       printRecentValues();
       break;
     case '\n':
-      printf("\t%.8g\n", pop());
+      op1 = pop();
+      pushRecentValue(op1);
+      printf("\t%.8g\n", op1);
       break;
     default:
       printf("error: unknown command %s \n", s);
@@ -113,10 +115,9 @@ double val[MAXVAL];   /* value stack */
 
 /* push: push f onto value stack */
 void push(double f) {
-  if (sp < MAXVAL) {
+  if (sp < MAXVAL)
     val[sp++] = f;
-    pushRecentValue(f);
-  } else
+  else
     printf("error: stack full, can't push %g\n", f);
 }
 
@@ -156,7 +157,7 @@ double popRecentValue() {
 
 /* printRecentValues: print all the stack of recent values */
 void printRecentValues() {
-  for (int i = 0; i <= rv; i++)
+  for (int i = 0; i < rv; i++)
     printf("%g\t", recentValues[i]);
   printf("\n");
 }
