@@ -13,6 +13,7 @@
 int getLine(char s[], int lim);
 int appendText(char line[], char text[], int index);
 void entab(char *text, int *space);
+void detab(char *text, int *space);
 
 
 int main(int argc, char *argv[]) 
@@ -92,6 +93,53 @@ int getLine(char line[], int lim) {
   return i;
 }
 
+/***
+    function that replaces tabs in the input with the 
+    proper number of blanks to space to the next tab stop.
+ ***/
+
+void detab(char *text, int *space){
+    char *text_p = text;
+
+  char text_aux[MAXTEXT];  
+  char *text_aux_p = text_aux;
+
+  int space_counter = 0;
+  int text_size = 0;
+  while (*text_aux_p++ = *text_p++)
+    text_size++;  
+  text_p = text;
+  text_aux_p = text_aux;
+  while (text_size > 0) {
+    switch (*text_aux_p) {
+    case '\t':
+      for (int i = space_counter % *space; i <= *space; i ++)
+  	*text_p++ = ' ';
+      if (*space != -1)
+	*space++;
+      space_counter = 0;
+      while (*text_aux_p == '\t') {
+	*text_aux_p++;
+  	text_size--;
+      }
+      break;
+    case '\n':
+      space_counter = 0;
+      text_size--;
+      break;
+    default:
+      *text_p++ = *text_aux_p++;
+      text_size--;
+      space_counter++;
+      break;
+    }
+  }
+}
+
+/*** 
+     function that replaces strings of blanks by minimum
+     number of tabs and blanks to achieve the same spacing.
+***/
 void entab(char *text, int *space) {
   char *text_p = text;
 
@@ -107,9 +155,13 @@ void entab(char *text, int *space) {
   while (text_size > 0) {
     switch (*text_aux_p) {
     case '\t':
-    case ' ':
-      for (int i = space_counter; i <= *space; i ++)
-  	*text_p++ = ' ';
+    case ' ':      
+      while ((space_counter / *space) > 1) {
+	*text_p++ = '\t';
+	space_counter -= *space;
+      }
+      for (int i = space_counter % *space; i <= *space; i ++)
+	*text_p++ = ' ';
       if (*space != -1)
 	*space++;
       space_counter = 0;
