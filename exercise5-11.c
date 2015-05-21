@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
   //default setting
   *variables_p = SPACE_TAB;
 
-  while (--argc > 1 && (*++argv)[0] == '-') {
+  while (--argc > 0 && (*++argv)[0] == '-') {
     while (c = *++argv[0]) {
       switch (c) {
       case 't':
