@@ -1,21 +1,47 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
+#define DEFAULT_PRINT_LINES 10    /* default lines to show */
 #define MAXLINES 5000    /* max lines to be sorted */
 #define MAXLEN 1000 /* max length of any input line */
 
-int readLines(char *lineptr[MAXLEN], int nlines);
-int getLine(char *s[], int);
-void writeLines(char *lineptr[], int nlines);
+int readLines(char (*text)[MAXLINES][MAXLEN], int maxlines);
+int getLine(char (*text)[MAXLINES][MAXLEN], int lim, int nlines);
+void writeLines(char (*text)[MAXLINES][MAXLEN], int nlines, int linesToPrint);
 
-int main() 
+int main(int argc, char *argv[]) 
 {
+  //default settings
+  int linesToPrint = DEFAULT_PRINT_LINES;
+  int c;
+  int index = 0;
+
+  while (--argc > 0 && (*++argv)[index++] == '-') {
+    c = (*argv)[index++];
+    switch (c) {
+    case 'n':
+      if (isdigit((*argv)[++index])) {
+	char valor[12];
+	int index_valor = 0;      
+	while (isdigit((*argv)[index]))
+	  valor[index_valor++] = (*argv)[index++];
+	valor[index_valor] = '\0';      
+	linesToPrint = atoi(valor);
+      }      
+      break;
+    default:
+      printf("tail: illegal option %c\n", c);	
+      argc = 0;
+      return -1;
+      break;
+      
+    }
+  }
   int nlines; /* number of input lines read */
   char text[MAXLINES][MAXLEN];
-  char (*lineptr)[MAXLEN] = &text;
-
-  if ((nlines = readLines(&lineptr, MAXLINES)) >= 0) {
-    writeLines(lineptr, nlines);
+  if ((nlines = readLines(&text, MAXLINES)) >= 0) {
+    writeLines(&text, nlines, linesToPrint);
     return 0;
   } else {
     printf("error: input too big\n");
@@ -23,44 +49,36 @@ int main()
   }
 }
 
-extern nlines = 0;
 /* readlines: read input lines */
-int readLines(char *lineptr[MAXLEN], int maxlines)
+int readLines(char (*text)[MAXLINES][MAXLEN], int maxlines)
 {
-  int len, nlines;
-  printf("readlines inicio\n");
-  while ((len = getLine(&lineptr[0], MAXLEN)) > 0){
-    printf("readline while %s\n", *lineptr);
+  int len = 0, nlines = 0;
+  while ((len = getLine(text, MAXLINES, nlines)) > 0){
     if (nlines >= maxlines)
       return -1;
     nlines++;
   }
-  printf("readlines return\n");
   return nlines;
 }
 
 
 /* writelines: write output lines */
-void writeLines(char *lineptr[], int nlines)
+void writeLines(char (*text)[MAXLINES][MAXLEN], int nlines, int linesToPrint)
 {
-  while (nlines-- > 0)
-    printf("%s\n", *lineptr++);
+  int lim_lines = linesToPrint >= nlines? nlines - DEFAULT_PRINT_LINES : nlines - linesToPrint;
+  while (((*text)[lim_lines]) && (lim_lines <= nlines)) {
+    printf("%s", (*text)[lim_lines++]);
+  }
 }
 
 /* getline: get line into s, return length */
-int getLine(char *s[], int lim) {
-  int c, i;  
-  //char *line = &s;
-  i = 0;
-  printf("getLine inicio\n");
+int getLine(char (*text)[MAXLINES][MAXLEN], int lim, int nlines) {
+  int c, i = 0;
   for (;lim > 0 && (c = getchar()) != EOF && c != '\n'; lim--, i++) {
-    printf("getline for %c nlines: %d i: %d\n", c, nlines, i);
-    s[nlines][i++] = c;
+    (*text)[nlines][i] = c;
   }
   if (c == '\n')
-    s[nlines][i++] = c;
-  s[nlines][i] = '\0';
-  printf("return getline %c\n", *s);
-  printf("return getline %s\n", s);
+    (*text)[nlines][i++]= c;
+  (*text)[nlines][i] = '\0';
   return i;
 }
