@@ -3,7 +3,7 @@
 
 void strncpyP(char *s, char *ct, int n);
 void strncatP(char *s, char *ct, int n);
-int strncmpP(char *cs, char *ct, int n);
+int strncmpP(char *cs, char *ct);
 
 int main() {
   char s[MAXSIZE] = "testing the function strncopy";
@@ -21,11 +21,11 @@ int main() {
   printf("strncmpP --- cs: %s ct: %s n: %d\tresultado --- s: %d\n", s, ct, n, strncmpP(s, ct, n));
 
 
-  printf("strncatP --- s: %s ct: %s n: %d", s, ct, n);
-  strncatP(s, ct, n);
+  printf("strncatP --- s: %s ct: %s", s, ct);
+  strncatP(s, ct);
   printf("\nresultado --- s: %s\n", s);
 
-  printf("strncmpP --- cs: %s ct: %s n: %d\tresultado --- s: %d\n", s, ct, n, strncmpP(s, ct, n));
+  printf("strncmpP --- cs: %s ct: %s n: %d\tresultado --- s: %d\n", s, ct, n, strncmpP(s, ct));
 
   printf("strncpyP --- s: %s ct: %s n: %d", s, ct, n);
   strncpyP(s, ct, n);
@@ -60,14 +60,14 @@ void strncpyP(char *s, char *ct, int n) {
 
 
 /* strncmp: compare at most n characters of string cs to string ct;
-   return <0 if cs<ct, 0 if cs==ct, or >0 if cs>ct.
+   return -1 if cs < ct, 0 if cs == ct, or 1 if cs > ct.
  */
-int strncmpP(char *cs, char *ct, int n) {
-  for(ct+=n, cs+=n; *cs++ == *ct++;);
+int strncmpP(char *cs, char *ct) {
+  while(*cs++ == *ct++);
   if (*cs < *ct)
+    return -1;
+  else if (*cs > *ct)
     return 1;
   else if (*cs == *ct)
     return 0;
-  else
-    return -1;  
 }
